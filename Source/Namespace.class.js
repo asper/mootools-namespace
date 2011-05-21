@@ -35,11 +35,11 @@ var Namespace = new Class({
         
         // Iterate through each type of dependency (i.e. "Extends")
         params.each(function(param) {
-            var resources = $splat(options[param]);
+            var resources = Array.from(options[param]);
             
             resources.each(function(resource, i) {
                 // If the dependency isn't a class yet, try to load the class
-                if ($type(resource) === "string") {
+                if (typeOf(resource) === "string") {
                     // Get existing class or load it via SJAX
                     var resource = Namespace.getClass(resource)
                                  ? Namespace.getClass(resource)
@@ -47,8 +47,8 @@ var Namespace = new Class({
                     
                     // If class finally exists, assign it to it's key (for Requires)
                     // or to the param itself (for Extends)
-                    if ($type(resource) === "class") {
-                        if ($type(options[param]) === "array") {
+                    if (typeOf(resource) === "class") {
+                        if (typeOf(options[param]) === "array") {
                             options[param][i] = resource;
                         } else {
                             options[param] = resource;
@@ -143,7 +143,7 @@ Namespace.getBasePath = function(namespace) {
             var namespaces = namespace.split(Namespace.options.delimiter);
             
             // If namespace has a callback instead of a path, use that
-            if ($type(stubPath) === 'function') {
+            if (typeOf(stubPath) === 'function') {
                 return stubPath(namespaces);
             } else {
             // Otherwise, use the specified path
@@ -158,7 +158,7 @@ Namespace.getBasePath = function(namespace) {
 };
 
 Namespace.require = function(namespaces) {
-    $splat(namespaces).each(function(namespace) {
+    Array.from(namespaces).each(function(namespace) {
         Namespace.load(namespace);
     });
 };
